@@ -57,7 +57,7 @@ public class Producer {
       final String value = rows[pos];
       final ProducerRecord<String, String> record = new ProducerRecord<>(KAFKA_TOPIC, key, value);
       producer.send(record, (md, e) -> {
-        System.out.printf("Key: %s. Written to offset: %d %n", key, md.offset());
+        System.out.printf("Key: %s, value: %s to offset: %d %n", key, value, md.offset());
       });
       Thread.sleep(1000);
       pos = (pos + 1) % rows.length;
