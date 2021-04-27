@@ -33,8 +33,7 @@ public class Producer {
     // Confluent interceptors
     final Properties settings = new Properties();
     settings.put(ProducerConfig.CLIENT_ID_CONFIG, driverId);
-    // TODO: configure the location of the bootstrap server
-    settings.put(ProducerConfig.???
+    settings.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
     settings.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
     settings.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
     settings.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,
@@ -56,12 +55,9 @@ public class Producer {
     while (true) {
       final String key = driverId;
       final String value = rows[pos];
-      // TODO: populate the message object
-      final ProducerRecord<String, String> record = new ProducerRecord<>(???, ???, ???);
-      // TODO: write the lat/long position to a Kafka topic
-      // TODO: print the key and value in the callback lambda
-      producer.send(???, (md, e) -> {
-        System.out.println(???
+      final ProducerRecord<String, String> record = new ProducerRecord<>(KAFKA_TOPIC, key, value);
+      producer.send(record, (md, e) -> {
+        System.out.printf("Key: %s. Written to offset: %d %n", key, md.offset());
       });
       Thread.sleep(1000);
       pos = (pos + 1) % rows.length;
